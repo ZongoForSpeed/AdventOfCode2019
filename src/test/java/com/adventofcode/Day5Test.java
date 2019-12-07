@@ -87,10 +87,8 @@ public class Day5Test {
     @Test
     void testSimple() {
         int randomValue = new Random().nextInt();
-        int[] io = {randomValue, -1};
-        int[] intcode = Intcode.intcode("3,0,4,0,99", io);
-        assertThat(intcode[0]).isEqualTo(randomValue);
-        assertThat(io).containsExactly(randomValue, randomValue);
+        int result = Intcode.ioIntcode("3,0,4,0,99", randomValue);
+        assertThat(result).isEqualTo(randomValue);
     }
 
     @Test
@@ -108,9 +106,8 @@ public class Day5Test {
     @Test
     void testInputPartOne() throws IOException {
         String line = FileUtils.readLine("/day/5/input");
-        int[] io = {1, -1};
-        Intcode.intcode(line, io);
-        assertThat(io[1]).isEqualTo(16209841);
+        int result = Intcode.ioIntcode(line, 1);
+        assertThat(result).isEqualTo(16209841);
     }
 
     /**
@@ -159,93 +156,51 @@ public class Day5Test {
      */
     @Test
     void testPositionModeEqual() {
-        int[] io = {8, -1};
-        Intcode.intcode("3,9,8,9,10,9,4,9,99,-1,8", io);
-        assertThat(io).containsExactly(8, 1);
-
-        io[0] = 42;
-        Intcode.intcode("3,9,8,9,10,9,4,9,99,-1,8", io);
-        assertThat(io).containsExactly(42, 0);
+        assertThat(Intcode.ioIntcode("3,9,8,9,10,9,4,9,99,-1,8", 8)).isEqualTo(1);
+        assertThat(Intcode.ioIntcode("3,9,8,9,10,9,4,9,99,-1,8", 42)).isEqualTo(0);
     }
 
     @Test
     void testPositionModeLess() {
-        int[] io = {7, -1};
-
-        Intcode.intcode("3,9,7,9,10,9,4,9,99,-1,8", io);
-        assertThat(io[1]).isEqualTo(1);
-
-        io[0] = 42;
-        Intcode.intcode("3,9,7,9,10,9,4,9,99,-1,8", io);
-        assertThat(io[1]).isEqualTo(0);
+        assertThat(Intcode.ioIntcode("3,9,7,9,10,9,4,9,99,-1,8", 7)).isEqualTo(1);
+        assertThat(Intcode.ioIntcode("3,9,7,9,10,9,4,9,99,-1,8", 42)).isEqualTo(0);
     }
 
     @Test
     void testImmediateModeEqual() {
-        int[] io = {8, -1};
-        Intcode.intcode("3,3,1108,-1,8,3,4,3,99", io);
-        assertThat(io[1]).isEqualTo(1);
-
-        io[0] = 42;
-        Intcode.intcode("3,3,1108,-1,8,3,4,3,99", io);
-        assertThat(io[1]).isEqualTo(0);
+        assertThat(Intcode.ioIntcode("3,3,1108,-1,8,3,4,3,99", 8)).isEqualTo(1);
+        assertThat(Intcode.ioIntcode("3,3,1108,-1,8,3,4,3,99", 42)).isEqualTo(0);
     }
 
     @Test
     void testImmediateModeLess() {
-        int[] io = {7, -1};
-        Intcode.intcode("3,3,1107,-1,8,3,4,3,99", io);
-        assertThat(io[1]).isEqualTo(1);
-
-        io[0] = 42;
-        Intcode.intcode("3,3,1107,-1,8,3,4,3,99", io);
-        assertThat(io[1]).isEqualTo(0);
+        assertThat(Intcode.ioIntcode("3,3,1107,-1,8,3,4,3,99", 7)).isEqualTo(1);
+        assertThat(Intcode.ioIntcode("3,3,1107,-1,8,3,4,3,99", 42)).isEqualTo(0);
     }
 
     @Test
     void testPositionJump() {
-        int[] io = {0, -1};
-        Intcode.intcode("3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9", io);
-        assertThat(io[1]).isEqualTo(0);
-
-        io[0] = 42;
-        Intcode.intcode("3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9", io);
-        assertThat(io[1]).isEqualTo(1);
+        assertThat(Intcode.ioIntcode("3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9", 0)).isEqualTo(0);
+        assertThat(Intcode.ioIntcode("3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9", 42)).isEqualTo(1);
     }
 
     @Test
     void testImmediateJump() {
-        int[] io = {0, -1};
-
-        Intcode.intcode("3,3,1105,-1,9,1101,0,0,12,4,12,99,1", io);
-        assertThat(io[1]).isEqualTo(0);
-
-        io[0] = 42;
-        Intcode.intcode("3,3,1105,-1,9,1101,0,0,12,4,12,99,1", io);
-        assertThat(io[1]).isEqualTo(1);
+        assertThat(Intcode.ioIntcode("3,3,1105,-1,9,1101,0,0,12,4,12,99,1", 0)).isEqualTo(0);
+        assertThat(Intcode.ioIntcode("3,3,1105,-1,9,1101,0,0,12,4,12,99,1", 42)).isEqualTo(1);
     }
 
     @Test
     void testLargerExample() {
-        int[] io = {42, -1};
-
-        Intcode.intcode("3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99", io);
-        assertThat(io[1]).isEqualTo(1001);
-
-        io[0] = 7;
-        Intcode.intcode("3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99", io);
-        assertThat(io[1]).isEqualTo(999);
-
-        io[0] = 8;
-        Intcode.intcode("3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99", io);
-        assertThat(io[1]).isEqualTo(1000);
+        String codes = "3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99";
+        assertThat(Intcode.ioIntcode(codes, 42)).isEqualTo(1001);
+        assertThat(Intcode.ioIntcode(codes, 7)).isEqualTo(999);
+        assertThat(Intcode.ioIntcode(codes, 8)).isEqualTo(1000);
     }
 
     @Test
     void testInputPartTwo() throws IOException {
         String line = FileUtils.readLine("/day/5/input");
-        int[] io = {5, -1};
-        Intcode.intcode(line, io);
-        assertThat(io[1]).isEqualTo(8834787);
+        assertThat(Intcode.ioIntcode(line, 5)).isEqualTo(8834787);
     }
 }
