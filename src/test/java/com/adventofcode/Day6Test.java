@@ -23,15 +23,15 @@ public class Day6Test {
      * Except for the universal Center of Mass (COM), every object in space is in orbit around exactly one other object.
      * An orbit looks roughly like this:
      * <p>
-     * \
-     * \
-     * |
-     * |
+     *                   \
+     *                    \
+     *                     |
+     *                     |
      * AAA--> o            o <--BBB
-     * |
-     * |
-     * /
-     * /
+     *                     |
+     *                     |
+     *                    /
+     *                   /
      * <p>
      * In this diagram, the object BBB is in orbit around AAA. The path that BBB takes around AAA (drawn with lines) is
      * only partly shown. In the map data, this orbital relationship is written AAA)BBB, which means "BBB is in orbit
@@ -199,7 +199,7 @@ public class Day6Test {
         Map<String, String> graph = readGraph("/day/6/input");
         assertThat(countOrbits(graph)).isEqualTo(144909);
     }
-    
+
     @Test
     void testExamplePartTwo() throws IOException {
         Map<String, String> graph = readGraph("/day/6/example");
