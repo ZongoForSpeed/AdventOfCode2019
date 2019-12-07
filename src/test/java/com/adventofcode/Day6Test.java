@@ -59,11 +59,11 @@ public class Day6Test {
      * K)L
      * Visually, the above map of orbits looks like this:
      * <p>
-     * G - H       J - K - L
-     * /           /
+     *         G - H       J - K - L
+     *        /           /
      * COM - B - C - D - E - F
-     * \
-     * I
+     *                \
+     *                 I
      * In this visual representation, when two objects are connected by a line, the one on the right directly orbits
      * the one on the left.
      * <p>
@@ -139,13 +139,13 @@ public class Day6Test {
      * I)SAN
      * Visually, the above map of orbits looks like this:
      * <p>
-     * YOU
-     * /
-     * G - H       J - K - L
-     * /           /
+     *                           YOU
+     *                          /
+     *         G - H       J - K - L
+     *        /           /
      * COM - B - C - D - E - F
-     * \
-     * I - SAN
+     *                \
+     *                 I - SAN
      * In this example, YOU are in orbit around K, and SAN is in orbit around I. To move from K to I, a minimum of 4
      * orbital transfers are required:
      * <p>
@@ -155,13 +155,13 @@ public class Day6Test {
      * D to I
      * Afterward, the map of orbits looks like this:
      * <p>
-     * G - H       J - K - L
-     * /           /
+     *         G - H       J - K - L
+     *        /           /
      * COM - B - C - D - E - F
-     * \
-     * I - SAN
-     * \
-     * YOU
+     *                \
+     *                 I - SAN
+     *                  \
+     *                   YOU
      * What is the minimum number of orbital transfers required to move from the object YOU are orbiting to the object
      * SAN is orbiting? (Between the objects they are orbiting - not between YOU and SAN.)
      * <p>
