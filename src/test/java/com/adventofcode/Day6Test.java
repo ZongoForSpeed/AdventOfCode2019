@@ -1,15 +1,15 @@
 package com.adventofcode;
 
 import com.adventofcode.utils.FileUtils;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -76,26 +76,24 @@ public class Day6Test {
      * <p>
      * What is the total number of direct and indirect orbits in your map data?
      */
-    private static long internalCountOrbits(Multimap<String, String> graph, Map<String, Long> cache, String object) {
+    private static long internalCountOrbits(Map<String, String> graph, Map<String, Long> cache, String object) {
         Long value = cache.get(object);
         if (value != null) {
             return value;
         }
 
         long result = 0;
-        Collection<String> orbits = graph.get(object);
-        if (orbits != null) {
-            result += orbits.size();
-            for (String orbit : orbits) {
-                result += internalCountOrbits(graph, cache, orbit);
-            }
+        String orbit = graph.get(object);
+        if (orbit != null) {
+            result += 1;
+            result += internalCountOrbits(graph, cache, orbit);
         }
 
         cache.put(object, result);
         return result;
     }
 
-    public static long countOrbits(Multimap<String, String> graph) {
+    private static long countOrbits(Map<String, String> graph) {
         long result = 0;
 
         Map<String, Long> cache = new HashMap<>();
@@ -106,8 +104,8 @@ public class Day6Test {
         return result;
     }
 
-    private static Multimap<String, String> readGraph(String filename) throws IOException {
-        Multimap<String, String> graph = HashMultimap.create();
+    private static Map<String, String> readGraph(String filename) throws IOException {
+        Map<String, String> graph = new HashMap<>();
         List<String> lines = FileUtils.readLines(filename);
         for (String line : lines) {
             String[] orbit = line.split("\\)");
@@ -115,12 +113,82 @@ public class Day6Test {
         }
 
         return graph;
+    }
 
+    /**
+     * --- Part Two ---
+     * Now, you just need to figure out how many orbital transfers you (YOU) need to take to get to Santa (SAN).
+     * <p>
+     * You start at the object YOU are orbiting; your destination is the object SAN is orbiting. An orbital transfer
+     * lets you move from any object to an object orbiting or orbited by that object.
+     * <p>
+     * For example, suppose you have the following map:
+     * <p>
+     * COM)B
+     * B)C
+     * C)D
+     * D)E
+     * E)F
+     * B)G
+     * G)H
+     * D)I
+     * E)J
+     * J)K
+     * K)L
+     * K)YOU
+     * I)SAN
+     * Visually, the above map of orbits looks like this:
+     * <p>
+     * YOU
+     * /
+     * G - H       J - K - L
+     * /           /
+     * COM - B - C - D - E - F
+     * \
+     * I - SAN
+     * In this example, YOU are in orbit around K, and SAN is in orbit around I. To move from K to I, a minimum of 4
+     * orbital transfers are required:
+     * <p>
+     * K to J
+     * J to E
+     * E to D
+     * D to I
+     * Afterward, the map of orbits looks like this:
+     * <p>
+     * G - H       J - K - L
+     * /           /
+     * COM - B - C - D - E - F
+     * \
+     * I - SAN
+     * \
+     * YOU
+     * What is the minimum number of orbital transfers required to move from the object YOU are orbiting to the object
+     * SAN is orbiting? (Between the objects they are orbiting - not between YOU and SAN.)
+     * <p>
+     * Although it hasn't changed, you can still get your puzzle input.
+     */
+    private static Set<String> findParents(Map<String, String> graph, String node) {
+        Set<String> nodes = new HashSet<>();
+        String parent = graph.get(node);
+        while (parent != null) {
+            nodes.add(parent);
+            parent = graph.get(parent);
+        }
+
+        return nodes;
+    }
+
+    private static long countOrbitalTransfers(Map<String, String> graph, String node1, String node2) {
+        Set<String> parents1 = findParents(graph, node1);
+        Set<String> parents2 = findParents(graph, node2);
+        Sets.SetView<String> difference12 = Sets.difference(parents1, parents2);
+        Sets.SetView<String> difference21 = Sets.difference(parents2, parents1);
+        return difference12.size() + difference21.size();
     }
 
     @Test
-    void testExample() throws IOException {
-        Multimap<String, String> graph = readGraph("/day/6/example");
+    void testExamplePartOne() throws IOException {
+        Map<String, String> graph = readGraph("/day/6/example");
         assertThat(internalCountOrbits(graph, new HashMap<>(), "D")).isEqualTo(3);
         assertThat(internalCountOrbits(graph, new HashMap<>(), "L")).isEqualTo(7);
         assertThat(countOrbits(graph)).isEqualTo(42);
@@ -128,7 +196,22 @@ public class Day6Test {
 
     @Test
     void testInputPartOne() throws IOException {
-        Multimap<String, String> graph = readGraph("/day/6/input");
+        Map<String, String> graph = readGraph("/day/6/input");
         assertThat(countOrbits(graph)).isEqualTo(144909);
+    }
+    
+    @Test
+    void testExamplePartTwo() throws IOException {
+        Map<String, String> graph = readGraph("/day/6/example");
+        graph.put("YOU", "K");
+        graph.put("SAN", "I");
+
+        assertThat(countOrbitalTransfers(graph, "YOU", "SAN")).isEqualTo(4);
+    }
+
+    @Test
+    void testInputPartTwo() throws IOException {
+        Map<String, String> graph = readGraph("/day/6/input");
+        assertThat(countOrbitalTransfers(graph, "YOU", "SAN")).isEqualTo(259);
     }
 }
