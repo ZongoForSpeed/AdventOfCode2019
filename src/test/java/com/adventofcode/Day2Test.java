@@ -113,9 +113,8 @@ public class Day2Test {
     static int solvePuzzle(String input, int objective) {
         for (int noun = 0; noun < 100; ++noun) {
             for (int verb = 0; verb < 100; ++verb) {
-                int[] output = Intcode.intcode(input, noun, verb);
+                long[] output = Intcode.intcode(input, noun, verb);
                 if (output[0] == objective) {
-
                     return 100 * noun + verb;
                 }
             }
@@ -144,7 +143,7 @@ public class Day2Test {
     @Test
     void testInputPartOne() throws IOException {
         String input = FileUtils.readLine("/day/2/input");
-        int[] output = Intcode.intcode(input, 12, 2);
+        long[] output = Intcode.intcode(input, 12, 2);
         assertThat(output[0]).isEqualTo(3850704);
     }
 

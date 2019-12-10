@@ -87,7 +87,7 @@ public class Day5Test {
     @Test
     void testSimple() {
         int randomValue = new Random().nextInt();
-        int result = Intcode.ioIntcode("3,0,4,0,99", randomValue);
+        long result = Intcode.ioIntcode("3,0,4,0,99", randomValue);
         assertThat(result).isEqualTo(randomValue);
     }
 
@@ -106,7 +106,7 @@ public class Day5Test {
     @Test
     void testInputPartOne() throws IOException {
         String line = FileUtils.readLine("/day/5/input");
-        int result = Intcode.ioIntcode(line, 1);
+        long result = Intcode.ioIntcode(line, 1);
         assertThat(result).isEqualTo(16209841);
     }
 
