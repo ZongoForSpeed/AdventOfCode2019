@@ -6,7 +6,6 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Spliterator;
 import java.util.function.IntConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -14,6 +13,24 @@ import java.util.stream.StreamSupport;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Day8Test {
+    private static int[] readImage(String input, int layerSize) {
+        int[][] decoded = StreamSupport.stream(Iterables.partition(input.chars().map(c -> c - '0').boxed().collect(Collectors.toList()), layerSize).spliterator(), false)
+                .map(t -> t.stream().mapToInt(Integer::intValue).toArray())
+                .toArray(int[][]::new);
+        // System.out.println(Arrays.deepToString(decoded));
+        int layers = input.length() / layerSize;
+        int[] image = new int[layerSize];
+        for (int index = 0; index < layerSize; index++) {
+            for (int layer = 0; layer < layers; layer++) {
+                if (decoded[layer][index] != 2) {
+                    image[index] = decoded[layer][index];
+                    break;
+                }
+            }
+        }
+        return image;
+    }
+
     /**
      * --- Day 8: Space Image Format ---
      * The Elves' spirits are lifted when they realize you have an opportunity to reboot one of their Mars rovers, and
@@ -40,10 +57,10 @@ public class Day8Test {
      * following image layers:
      * <p>
      * Layer 1: 123
-     *          456
+     * 456
      * <p>
      * Layer 2: 789
-     *          012
+     * 012
      * The image you received is 25 pixels wide and 6 pixels tall.
      * <p>
      * To make sure the image wasn't corrupted during transmission, the Elves would like you to find the layer that
@@ -78,33 +95,33 @@ public class Day8Test {
      * Now you're ready to decode the image. The image is rendered by stacking the layers and aligning the pixels with
      * the same positions in each layer. The digits indicate the color of the corresponding pixel: 0 is black, 1 is
      * white, and 2 is transparent.
-     *
+     * <p>
      * The layers are rendered with the first layer in front and the last layer in back. So, if a given position has a
      * transparent pixel in the first and second layers, a black pixel in the third layer, and a white pixel in the
      * fourth layer, the final image would have a black pixel at that position.
-     *
+     * <p>
      * For example, given an image 2 pixels wide and 2 pixels tall, the image data 0222112222120000 corresponds to the
      * following image layers:
-     *
+     * <p>
      * Layer 1: 02
-     *          22
-     *
+     * 22
+     * <p>
      * Layer 2: 11
-     *          22
-     *
+     * 22
+     * <p>
      * Layer 3: 22
-     *          12
-     *
+     * 12
+     * <p>
      * Layer 4: 00
-     *          00
+     * 00
      * Then, the full image can be found by determining the top visible pixel in each position:
-     *
+     * <p>
      * The top-left pixel is black because the top layer is 0.
      * The top-right pixel is white because the top layer is 2 (transparent), but the second layer is 1.
      * The bottom-left pixel is white because the top two layers are 2, but the third layer is 1.
      * The bottom-right pixel is black because the only visible pixel in that position is 0 (from layer 4).
      * So, the final image looks like this:
-     *
+     * <p>
      * 01
      * 10
      * What message is produced after decoding your image?
@@ -125,28 +142,10 @@ public class Day8Test {
         printImage(image, 25, 6);
     }
 
-    private static int[] readImage(String input, int layerSize) {
-        int[][] decoded = StreamSupport.stream(Iterables.partition(input.chars().map(c -> c - '0').boxed().collect(Collectors.toList()), layerSize).spliterator(), false)
-                .map(t -> t.stream().mapToInt(Integer::intValue).toArray())
-                .toArray(int[][]::new);
-        // System.out.println(Arrays.deepToString(decoded));
-        int layers = input.length() / layerSize;
-        int[] image = new int[layerSize];
-        for (int index = 0; index < layerSize; index++) {
-            for (int layer = 0; layer < layers; layer++) {
-                if (decoded[layer][index] != 2) {
-                    image[index] = decoded[layer][index];
-                    break;
-                }
-            }
-        }
-        return image;
-    }
-
     private void printImage(int[] image, int width, int height) {
-        for (int index = 0; index < width*height; index += width) {
+        for (int index = 0; index < width * height; index += width) {
             StringBuilder sb = new StringBuilder();
-            Arrays.spliterator(image, index, index + width).forEachRemaining((IntConsumer) i -> sb.append(i == 1 ? 'X': ' '));
+            Arrays.spliterator(image, index, index + width).forEachRemaining((IntConsumer) i -> sb.append(i == 1 ? 'X' : ' '));
             System.out.println(sb.toString());
         }
     }

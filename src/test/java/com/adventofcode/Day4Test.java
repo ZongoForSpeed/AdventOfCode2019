@@ -50,7 +50,8 @@ public class Day4Test {
 
     /**
      * --- Part Two ---
-     * An Elf just remembered one more important detail: the two adjacent matching digits are not part of a larger group of matching digits.
+     * An Elf just remembered one more important detail: the two adjacent matching digits are not part of a larger group
+     * of matching digits.
      * <p>
      * Given this additional criterion, but still ignoring the range rule, the following are now true:
      * <p>
@@ -86,7 +87,7 @@ public class Day4Test {
     }
 
     @Test
-    void testInput() {;
+    void testInput() {
         long total = IntStream.range(153517, 630395).filter(Day4Test::match).count();
         assertThat(total).isEqualTo(1729);
     }

@@ -112,9 +112,12 @@ public class Day5Test {
 
     /**
      * --- Part Two ---
-     * The air conditioner comes online! Its cold air feels good for a while, but then the TEST alarms start to go off. Since the air conditioner can't vent its heat anywhere but back into the spacecraft, it's actually making the air inside the ship warmer.
+     * The air conditioner comes online! Its cold air feels good for a while, but then the TEST alarms start to go off.
+     * Since the air conditioner can't vent its heat anywhere but back into the spacecraft, it's actually making the air
+     * inside the ship warmer.
      * <p>
-     * Instead, you'll need to use the TEST to extend the thermal radiators. Fortunately, the diagnostic program (your puzzle input) is already equipped for this. Unfortunately, your Intcode computer is not.
+     * Instead, you'll need to use the TEST to extend the thermal radiators. Fortunately, the diagnostic program (your
+     * puzzle input) is already equipped for this. Unfortunately, your Intcode computer is not.
      * <p>
      * Your computer is only missing a few opcodes:
      * <p>
@@ -134,10 +137,14 @@ public class Day5Test {
      * <p>
      * For example, here are several programs that take one input, compare it to the value 8, and then produce one output:
      * <p>
-     * 3,9,8,9,10,9,4,9,99,-1,8 - Using position mode, consider whether the input is equal to 8; output 1 (if it is) or 0 (if it is not).
-     * 3,9,7,9,10,9,4,9,99,-1,8 - Using position mode, consider whether the input is less than 8; output 1 (if it is) or 0 (if it is not).
-     * 3,3,1108,-1,8,3,4,3,99 - Using immediate mode, consider whether the input is equal to 8; output 1 (if it is) or 0 (if it is not).
-     * 3,3,1107,-1,8,3,4,3,99 - Using immediate mode, consider whether the input is less than 8; output 1 (if it is) or 0 (if it is not).
+     * 3,9,8,9,10,9,4,9,99,-1,8 - Using position mode, consider whether the input is equal to 8; output 1 (if it is) or
+     * 0 (if it is not).
+     * 3,9,7,9,10,9,4,9,99,-1,8 - Using position mode, consider whether the input is less than 8; output 1 (if it is) or
+     * 0 (if it is not).
+     * 3,3,1108,-1,8,3,4,3,99 - Using immediate mode, consider whether the input is equal to 8; output 1 (if it is) or
+     * 0 (if it is not).
+     * 3,3,1107,-1,8,3,4,3,99 - Using immediate mode, consider whether the input is less than 8; output 1 (if it is) or
+     * 0 (if it is not).
      * <p>
      * Here are some jump tests that take an input, then output 0 if the input was zero or 1 if the input was non-zero:
      * <p>
@@ -148,9 +155,13 @@ public class Day5Test {
      * 3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,
      * 1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,
      * 999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99
-     * The above example program uses an input instruction to ask for a single number. The program will then output 999 if the input value is below 8, output 1000 if the input value is equal to 8, or output 1001 if the input value is greater than 8.
+     * The above example program uses an input instruction to ask for a single number. The program will then output 999
+     * if the input value is below 8, output 1000 if the input value is equal to 8, or output 1001 if the input value is
+     * greater than 8.
      * <p>
-     * This time, when the TEST diagnostic program runs its input instruction to get the ID of the system to test, provide it 5, the ID for the ship's thermal radiator controller. This diagnostic test suite only outputs one number, the diagnostic code.
+     * This time, when the TEST diagnostic program runs its input instruction to get the ID of the system to test,
+     * provide it 5, the ID for the ship's thermal radiator controller. This diagnostic test suite only outputs one
+     * number, the diagnostic code.
      * <p>
      * What is the diagnostic code for system ID 5?
      */
