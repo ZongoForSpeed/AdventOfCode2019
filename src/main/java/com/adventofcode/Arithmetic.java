@@ -64,4 +64,12 @@ public class Arithmetic {
         }
         return gcd;
     }
+
+    public static long ceil(long n, long d) {
+        return (n + d - 1) / d;
+    }
+
+    public static int ceil(int n, int d) {
+        return (n + d - 1) / d;
+    }
 }
