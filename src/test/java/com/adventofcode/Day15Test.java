@@ -1,38 +1,43 @@
 package com.adventofcode;
 
+import com.adventofcode.map.Direction;
+import com.adventofcode.map.Map2D;
+import com.adventofcode.map.Point2D;
 import com.adventofcode.utils.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
 
 public class Day15Test {
-    private static void cartography(Intcode.Robot robot, Map<Point, Character> map, Stack<Point.Direction> paths, Set<Point> visited, Point position) {
+    private static void cartography(Intcode.Robot robot, Map2D map, Stack<Direction> paths, Set<Point2D> visited, Point2D position) {
         if (visited.add(position)) {
-            for (Point.Direction d : Point.Direction.values()) {
-                long move = robot.action(d.ordinal() + 1);
-                Point newPosition = position.move(d);
-                map.put(newPosition, print(move));
+            for (Direction d : Direction.values()) {
+                long move = robot.action(convertDirection(d));
+                Point2D newPosition = position.move(d);
+                map.put(newPosition, move);
                 if (move != 0) {
                     paths.push(d);
                     cartography(robot, map, paths, visited, newPosition);
                     paths.pop();
-                    robot.action(d.reverse().ordinal() + 1);
+                    robot.action(convertDirection(d.reverse()));
                 }
             }
         }
+    }
+
+    private static int convertDirection(Direction d) {
+        return d.ordinal() + 1;
     }
 
     private static char print(long move) {
@@ -48,41 +53,20 @@ public class Day15Test {
         }
     }
 
-    private static Map<Point, List<Pair<Point, Integer>>> createGraph(Map<Point, Character> map) {
-        Map<Point, List<Pair<Point, Integer>>> graph = new HashMap<>();
-        for (Map.Entry<Point, Character> entry : map.entrySet()) {
-            Point point = entry.getKey();
-            if (entry.getValue() != '#') {
-                for (Point.Direction value : Point.Direction.values()) {
-                    Point move = point.move(value);
-                    if (map.getOrDefault(move, '#') != '#') {
+    private static Map<Point2D, List<Pair<Point2D, Integer>>> createGraph(Map2D map) {
+        Map<Point2D, List<Pair<Point2D, Integer>>> graph = new HashMap<>();
+        for (Map.Entry<Point2D, Long> entry : map.entrySet()) {
+            Point2D point = entry.getKey();
+            if (entry.getValue() != 0) {
+                for (Direction value : Direction.values()) {
+                    Point2D move = point.move(value);
+                    if (map.getOrDefault(move, 0L) != 0L) {
                         graph.computeIfAbsent(point, (ignore) -> new ArrayList<>()).add(Pair.of(move, 1));
                     }
                 }
             }
         }
         return graph;
-    }
-
-    private List<String> printMap(Map<Point, Character> map) {
-        long maxX = map.keySet().stream().mapToLong(Point::getX).max().orElse(0L);
-        long minX = map.keySet().stream().mapToLong(Point::getX).min().orElse(0L);
-        long maxY = map.keySet().stream().mapToLong(Point::getY).max().orElse(0L);
-        long minY = map.keySet().stream().mapToLong(Point::getY).min().orElse(0L);
-
-        char[][] view = new char[(int) (maxY - minY) + 1][(int) (maxX - minX) + 1];
-        for (char[] chars : view) {
-            Arrays.fill(chars, ' ');
-        }
-
-        for (Map.Entry<Point, Character> entry : map.entrySet()) {
-            view[(int) (entry.getKey().getY() - minY)][(int) (entry.getKey().getX() - minX)] = entry.getValue();
-        }
-
-        for (char[] chars : view) {
-            System.out.println(String.valueOf(chars));
-        }
-        return Arrays.stream(view).map(String::valueOf).collect(Collectors.toList());
     }
 
     /**
@@ -222,21 +206,21 @@ public class Day15Test {
         String line = FileUtils.readLine("/day/15/input");
         Intcode.Robot robot = new Intcode.Robot(line);
 
-        Point origin = new Point(0, 0);
-        Map<Point, Character> map = new HashMap<>();
+        Point2D origin = new Point2D(0, 0);
+        Map2D map = new Map2D();
         cartography(robot, map, new Stack<>(), new HashSet<>(), origin);
 
-        printMap(map);
+        map.print(Day15Test::print);
 
-        Point oxygen = map.entrySet().stream().filter(e -> e.getValue() == 'O').map(Map.Entry::getKey).findFirst().get();
-        Map<Point, List<Pair<Point, Integer>>> graph = createGraph(map);
+        Point2D oxygen = map.entrySet().stream().filter(e -> e.getValue() == 2).map(Map.Entry::getKey).findFirst().get();
+        Map<Point2D, List<Pair<Point2D, Integer>>> graph = createGraph(map);
 
-        Dijkstra<Point> dijkstra = new Dijkstra<>(graph);
+        Dijkstra<Point2D> dijkstra = new Dijkstra<>(graph);
 
-        Map<Point, Integer> distance = dijkstra.computeDistance(origin);
+        Map<Point2D, Integer> distance = dijkstra.computeDistance(origin);
         assertThat(distance).contains(entry(oxygen, 240));
 
-        Map<Point, Integer> oxygenFill = dijkstra.computeDistance(oxygen);
+        Map<Point2D, Integer> oxygenFill = dijkstra.computeDistance(oxygen);
         int duration = oxygenFill.values().stream().mapToInt(x -> x).max().orElse(0);
         assertThat(duration).isEqualTo(322);
     }

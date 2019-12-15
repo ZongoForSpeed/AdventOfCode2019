@@ -1,16 +1,13 @@
 package com.adventofcode;
 
+import com.adventofcode.map.Direction;
+import com.adventofcode.map.Map2D;
+import com.adventofcode.map.Point2D;
 import com.adventofcode.utils.FileUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -99,7 +96,7 @@ public class Day11Test {
         HullPaintingRobot robot = new HullPaintingRobot();
         Intcode.intcode(line, robot::programInput, robot::programOutput);
         assertThat(robot.getHull()).hasSize(1732);
-        robot.printHull();
+        robot.getHull().print(v -> v == 1 ? 'X' : ' ');
     }
 
     /**
@@ -122,7 +119,7 @@ public class Day11Test {
         robot.getHull().put(robot.getPosition(), 1L);
         Intcode.intcode(line, robot::programInput, robot::programOutput);
         assertThat(robot.getHull()).hasSize(249);
-        List<String> hull = robot.printHull();
+        List<String> hull = robot.hull.print(v -> v == 1 ? 'X' : ' ');
         assertThat(hull).containsExactly(
                 "  XX  XXX   XX  X    XXXX X  X X  X   XX   ",
                 " X  X X  X X  X X    X    X  X X  X    X   ",
@@ -134,15 +131,15 @@ public class Day11Test {
     }
 
     static class HullPaintingRobot {
-        Map<Pair<Long, Long>, Long> hull;
-        Pair<Long, Long> position;
-        char direction;
+        Map2D hull;
+        Point2D position;
+        Direction direction;
         long count;
 
         public HullPaintingRobot() {
-            hull = new HashMap<>();
-            position = Pair.of(0L, 0L);
-            direction = '^';
+            hull = new Map2D();
+            position = new Point2D(0L, 0L);
+            direction = Direction.NORTH;
             count = 0;
         }
 
@@ -155,20 +152,7 @@ public class Day11Test {
                 // System.out.println("Painting " + position + " in " + output);
                 hull.put(position, output);
             } else {
-                switch (direction) {
-                    case '^':
-                        direction = output == 0 ? '<' : '>';
-                        break;
-                    case '<':
-                        direction = output == 0 ? 'v' : '^';
-                        break;
-                    case 'v':
-                        direction = output == 0 ? '>' : '<';
-                        break;
-                    case '>':
-                        direction = output == 0 ? '^' : 'v';
-                        break;
-                }
+                direction = output == 0 ? direction.left() : direction.right();
                 move();
                 // System.out.println("Moving robot in " + direction + " to " + position);
             }
@@ -176,31 +160,18 @@ public class Day11Test {
         }
 
         private void move() {
-            switch (direction) {
-                case '^':
-                    position = Pair.of(position.getLeft(), position.getRight() - 1);
-                    break;
-                case '<':
-                    position = Pair.of(position.getLeft() - 1, position.getRight());
-                    break;
-                case 'v':
-                    position = Pair.of(position.getLeft(), position.getRight() + 1);
-                    break;
-                case '>':
-                    position = Pair.of(position.getLeft() + 1, position.getRight());
-                    break;
-            }
+            position = position.move(direction);
         }
 
-        public Map<Pair<Long, Long>, Long> getHull() {
+        public Map2D getHull() {
             return hull;
         }
 
-        public Pair<Long, Long> getPosition() {
+        public Point2D getPosition() {
             return position;
         }
 
-        public char getDirection() {
+        public Direction getDirection() {
             return direction;
         }
 
@@ -208,25 +179,5 @@ public class Day11Test {
             return count;
         }
 
-        private List<String> printHull() {
-            long maxX = hull.keySet().stream().map(Pair::getLeft).max(Comparator.comparingLong(x -> x)).orElse(0L);
-            long minX = hull.keySet().stream().map(Pair::getLeft).min(Comparator.comparingLong(x -> x)).orElse(0L);
-            long maxY = hull.keySet().stream().map(Pair::getRight).max(Comparator.comparingLong(x -> x)).orElse(0L);
-            long minY = hull.keySet().stream().map(Pair::getRight).min(Comparator.comparingLong(x -> x)).orElse(0L);
-
-            char[][] view = new char[(int) (maxY - minY) + 1][(int) (maxX - minX) + 1];
-            for (char[] chars : view) {
-                Arrays.fill(chars, ' ');
-            }
-
-            for (Map.Entry<Pair<Long, Long>, Long> entry : hull.entrySet()) {
-                view[(int) (entry.getKey().getRight() - minY)][(int) (entry.getKey().getLeft() - minX)] = entry.getValue() == 1 ? 'X' : ' ';
-            }
-
-            for (char[] chars : view) {
-                System.out.println(String.valueOf(chars));
-            }
-            return Arrays.stream(view).map(String::valueOf).collect(Collectors.toList());
-        }
     }
 }

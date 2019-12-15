@@ -1,11 +1,12 @@
 package com.adventofcode;
 
+import com.adventofcode.map.Map2D;
+import com.adventofcode.map.Point2D;
 import com.adventofcode.utils.FileUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,6 +42,9 @@ public class Day13Test {
         Arkanoid game = new Arkanoid();
         Intcode.intcode(line, () -> 0, game::gameOutput);
 
+        List<String> print = game.print();
+        long count = print.stream().flatMapToInt(String::chars).filter(c -> c == '░').count();
+        /*
         char[][] chars = game.print();
         int count = 0;
         for (char[] printLine : chars) {
@@ -51,7 +55,7 @@ public class Day13Test {
                 }
             }
         }
-
+*/
         assertThat(count).isEqualTo(348);
     }
 
@@ -87,10 +91,10 @@ public class Day13Test {
         private int x;
         private int y;
         private long score = 0;
-        private Map<Pair<Integer, Integer>, Integer> squares = new HashMap<>();
+        private Map2D squares = new Map2D();
 
-        private static char print(int code) {
-            switch (code) {
+        private static char print(long code) {
+            switch ((int) code) {
                 case 0:
                     return ' ';
                 case 1:
@@ -118,22 +122,14 @@ public class Day13Test {
                     if (x == -1 && y == 0) {
                         score = output;
                     } else {
-                        squares.put(Pair.of(x, y), (int) output);
+                        squares.put(new Point2D(x, y), output);
                     }
                     break;
             }
         }
 
-        public char[][] print() {
-            int maxX = squares.keySet().stream().mapToInt(Pair::getLeft).max().orElse(0);
-            int maxY = squares.keySet().stream().mapToInt(Pair::getRight).max().orElse(0);
-
-            char[][] map = new char[maxY + 1][maxX + 1];
-            for (Map.Entry<Pair<Integer, Integer>, Integer> entry : squares.entrySet()) {
-                map[entry.getKey().getRight()][entry.getKey().getLeft()] = print(entry.getValue());
-            }
-
-            return map;
+        public List<String> print() {
+            return squares.print(Arkanoid::print);
         }
 
         public long getScore() {
@@ -141,16 +137,16 @@ public class Day13Test {
         }
 
         public long gameInput() {
-            Pair<Integer, Integer> ballPosition = Pair.of(0, 0);
-            Pair<Integer, Integer> paddlePosition = Pair.of(0, 0);
-            for (Map.Entry<Pair<Integer, Integer>, Integer> entry : squares.entrySet()) {
+            Point2D ballPosition = new Point2D(0, 0);
+            Point2D paddlePosition = new Point2D(0, 0);
+            for (Map.Entry<Point2D, Long> entry : squares.entrySet()) {
                 if (entry.getValue() == 3) {
                     paddlePosition = entry.getKey();
                 } else if (entry.getValue() == 4) {
                     ballPosition = entry.getKey();
                 }
             }
-            return Integer.compare(ballPosition.getLeft(), paddlePosition.getLeft());
+            return Long.compare(ballPosition.getX(), paddlePosition.getX());
         }
     }
 }

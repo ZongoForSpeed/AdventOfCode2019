@@ -1,9 +1,10 @@
 package com.adventofcode;
 
+import com.adventofcode.map.Direction;
+import com.adventofcode.map.Point2D;
 import com.adventofcode.utils.FileUtils;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
-import org.apache.commons.lang3.tuple.Pair;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -62,14 +63,14 @@ public class Day3Test {
      * U98,R91,D20,R16,D67,R40,U7,R15,U6,R7 = distance 135
      * What is the Manhattan distance from the central port to the closest intersection?
      */
-    public static int intersection(String path1, String path2) {
-        List<Pair<Integer, Integer>> positions1 = readPath(path1);
-        List<Pair<Integer, Integer>> positions2 = readPath(path2);
+    public static long intersection(String path1, String path2) {
+        List<Point2D> positions1 = readPath(path1);
+        List<Point2D> positions2 = readPath(path2);
 
-        Sets.SetView<Pair<Integer, Integer>> intersection = Sets.intersection(Sets.newHashSet(positions1.subList(1, positions1.size() - 1)), Sets.newHashSet(positions2.subList(1, positions2.size() - 1)));
-        int distance = Integer.MAX_VALUE;
-        for (Pair<Integer, Integer> position : intersection) {
-            int d = Math.abs(position.getLeft()) + Math.abs(position.getRight());
+        Sets.SetView<Point2D> intersection = Sets.intersection(Sets.newHashSet(positions1.subList(1, positions1.size() - 1)), Sets.newHashSet(positions2.subList(1, positions2.size() - 1)));
+        long distance = Integer.MAX_VALUE;
+        for (Point2D position : intersection) {
+            long d = Math.abs(position.getX()) + Math.abs(position.getY());
             if (d < distance) {
                 distance = d;
             }
@@ -77,10 +78,10 @@ public class Day3Test {
         return distance;
     }
 
-    public static List<Pair<Integer, Integer>> readPath(String path) {
+    public static List<Point2D> readPath(String path) {
         String[] steps = path.split(",");
-        List<Pair<Integer, Integer>> result = new ArrayList<>();
-        Pair<Integer, Integer> position = Pair.of(0, 0);
+        List<Point2D> result = new ArrayList<>();
+        Point2D position = new Point2D(0, 0);
         result.add(position);
         for (String move : steps) {
             char direction = move.charAt(0);
@@ -89,21 +90,22 @@ public class Day3Test {
             for (int i = 1; i < distance + 1; ++i) {
                 switch (direction) {
                     case 'R':
-                        result.add(Pair.of(position.getLeft() + i, position.getRight()));
+                        position = position.move(Direction.EAST);
                         break;
                     case 'U':
-                        result.add(Pair.of(position.getLeft(), position.getRight() + i));
+                        position = position.move(Direction.NORTH);
                         break;
                     case 'L':
-                        result.add(Pair.of(position.getLeft() - i, position.getRight()));
+                        position = position.move(Direction.WEST);
                         break;
                     case 'D':
-                        result.add(Pair.of(position.getLeft(), position.getRight() - i));
+                        position = position.move(Direction.SOUTH);
                         break;
                     default:
-                        result.add(Pair.of(Integer.MIN_VALUE, Integer.MIN_VALUE));
+                        position = new Point2D(Integer.MIN_VALUE, Integer.MIN_VALUE);
                         break;
                 }
+                result.add(position);
             }
             position = Iterables.getLast(result);
         }
@@ -146,12 +148,12 @@ public class Day3Test {
      * What is the fewest combined steps the wires must take to reach an intersection?
      */
     public static int intersectionSteps(String path1, String path2) {
-        List<Pair<Integer, Integer>> positions1 = readPath(path1);
-        List<Pair<Integer, Integer>> positions2 = readPath(path2);
+        List<Point2D> positions1 = readPath(path1);
+        List<Point2D> positions2 = readPath(path2);
 
-        Sets.SetView<Pair<Integer, Integer>> intersection = Sets.intersection(Sets.newHashSet(positions1.subList(1, positions1.size() - 1)), Sets.newHashSet(positions2.subList(1, positions2.size() - 1)));
+        Sets.SetView<Point2D> intersection = Sets.intersection(Sets.newHashSet(positions1.subList(1, positions1.size() - 1)), Sets.newHashSet(positions2.subList(1, positions2.size() - 1)));
         int steps = Integer.MAX_VALUE;
-        for (Pair<Integer, Integer> position : intersection) {
+        for (Point2D position : intersection) {
             int steps1 = positions1.indexOf(position);
             int steps2 = positions2.indexOf(position);
 

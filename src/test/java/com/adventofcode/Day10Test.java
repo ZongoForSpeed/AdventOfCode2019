@@ -1,5 +1,6 @@
 package com.adventofcode;
 
+import com.adventofcode.map.Point2D;
 import com.adventofcode.utils.FileUtils;
 import com.google.common.collect.Iterables;
 import org.apache.commons.lang3.tuple.Pair;
@@ -25,26 +26,26 @@ public class Day10Test {
         return a > b ? 1 : -1;
     }
 
-    private static Pair<Pair<Integer, Integer>, Map<Double, List<Asteroids>>> findBestLocation(List<String> map) {
-        List<Pair<Integer, Integer>> asteroids = new ArrayList<>();
+    private static Pair<Point2D, Map<Double, List<Asteroids>>> findBestLocation(List<String> map) {
+        List<Point2D> asteroids = new ArrayList<>();
         for (int i = 0, mapSize = map.size(); i < mapSize; i++) {
             String line = map.get(i);
             for (int j = 0, lineSize = line.length(); j < lineSize; j++) {
                 if (line.charAt(j) == '#') {
-                    asteroids.add(Pair.of(j, i));
+                    asteroids.add(new Point2D(j, i));
                 }
             }
         }
 
-        Pair<Integer, Integer> bestLocation = null;
+        Point2D bestLocation = null;
         Map<Double, List<Asteroids>> bestBeamView = null;
         int count = 0;
-        for (Pair<Integer, Integer> location : asteroids) {
+        for (Point2D location : asteroids) {
             Map<Double, List<Asteroids>> beamView = new TreeMap<>(Day10Test::doubleCompare);
-            for (Pair<Integer, Integer> asteroid : asteroids) {
+            for (Point2D asteroid : asteroids) {
                 if (!asteroid.equals(location)) {
-                    int dx = location.getLeft() - asteroid.getLeft();
-                    int dy = location.getRight() - asteroid.getRight();
+                    long dx = location.getX() - asteroid.getX();
+                    long dy = location.getY() - asteroid.getY();
                     double theta = (Math.atan2(-dx, dy) + 2 * Math.PI) % (Math.PI * 2);
                     double r = Math.sqrt(dx * dx + dy * dy);
                     Asteroids asteroids1 = new Asteroids(r, asteroid);
@@ -204,8 +205,8 @@ public class Day10Test {
                 "#####",
                 "....#",
                 "...##");
-        Pair<Pair<Integer, Integer>, Map<Double, List<Asteroids>>> result = findBestLocation(map);
-        assertThat(result.getLeft()).isEqualTo(Pair.of(3, 4));
+        Pair<Point2D, Map<Double, List<Asteroids>>> result = findBestLocation(map);
+        assertThat(result.getLeft()).isEqualTo(new Point2D(3, 4));
         assertThat(result.getRight()).hasSize(8);
     }
 
@@ -222,8 +223,8 @@ public class Day10Test {
                 ".##.#..###",
                 "##...#..#.",
                 ".#....####");
-        Pair<Pair<Integer, Integer>, Map<Double, List<Asteroids>>> result = findBestLocation(map);
-        assertThat(result.getLeft()).isEqualTo(Pair.of(5, 8));
+        Pair<Point2D, Map<Double, List<Asteroids>>> result = findBestLocation(map);
+        assertThat(result.getLeft()).isEqualTo(new Point2D(5, 8));
         assertThat(result.getRight()).hasSize(33);
     }
 
@@ -240,8 +241,8 @@ public class Day10Test {
                 "..##....##",
                 "......#...",
                 ".####.###.");
-        Pair<Pair<Integer, Integer>, Map<Double, List<Asteroids>>> result = findBestLocation(map);
-        assertThat(result.getLeft()).isEqualTo(Pair.of(1, 2));
+        Pair<Point2D, Map<Double, List<Asteroids>>> result = findBestLocation(map);
+        assertThat(result.getLeft()).isEqualTo(new Point2D(1, 2));
         assertThat(result.getRight()).hasSize(35);
     }
 
@@ -258,8 +259,8 @@ public class Day10Test {
                 "#..#.#.###",
                 ".##...##.#",
                 ".....#.#..");
-        Pair<Pair<Integer, Integer>, Map<Double, List<Asteroids>>> result = findBestLocation(map);
-        assertThat(result.getLeft()).isEqualTo(Pair.of(6, 3));
+        Pair<Point2D, Map<Double, List<Asteroids>>> result = findBestLocation(map);
+        assertThat(result.getLeft()).isEqualTo(new Point2D(6, 3));
         assertThat(result.getRight()).hasSize(41);
     }
 
@@ -286,15 +287,15 @@ public class Day10Test {
                 ".#.#.###########.###",
                 "#.#.#.#####.####.###",
                 "###.##.####.##.#..##");
-        Pair<Pair<Integer, Integer>, Map<Double, List<Asteroids>>> result = findBestLocation(map);
-        assertThat(result.getLeft()).isEqualTo(Pair.of(11, 13));
+        Pair<Point2D, Map<Double, List<Asteroids>>> result = findBestLocation(map);
+        assertThat(result.getLeft()).isEqualTo(new Point2D(11, 13));
         assertThat(result.getRight()).hasSize(210);
     }
 
     @Test
     void testInputPartOne() throws IOException {
-        Pair<Pair<Integer, Integer>, Map<Double, List<Asteroids>>> result = findBestLocation(FileUtils.readLines("/day/10/input"));
-        assertThat(result.getLeft()).isEqualTo(Pair.of(26, 29));
+        Pair<Point2D, Map<Double, List<Asteroids>>> result = findBestLocation(FileUtils.readLines("/day/10/input"));
+        assertThat(result.getLeft()).isEqualTo(new Point2D(26, 29));
         assertThat(result.getRight()).hasSize(303);
     }
 
@@ -377,13 +378,13 @@ public class Day10Test {
                 "##...#...#.#####.",
                 "..#.....#...###..",
                 "..#.#.....#....##");
-        Pair<Pair<Integer, Integer>, Map<Double, List<Asteroids>>> result = findBestLocation(map);
-        assertThat(result.getLeft()).isEqualTo(Pair.of(8, 3));
+        Pair<Point2D, Map<Double, List<Asteroids>>> result = findBestLocation(map);
+        assertThat(result.getLeft()).isEqualTo(new Point2D(8, 3));
         assertThat(result.getRight()).hasSize(30);
 
         List<Asteroids> asteroids = vaporizeAsteroids(result.getRight());
         Asteroids lastAsteroid = Iterables.getLast(asteroids);
-        assertThat(lastAsteroid.getPosition()).isEqualTo(Pair.of(14, 3));
+        assertThat(lastAsteroid.getPosition()).isEqualTo(new Point2D(14, 3));
     }
 
     @Test
@@ -409,8 +410,8 @@ public class Day10Test {
                 ".#.#.###########.###",
                 "#.#.#.#####.####.###",
                 "###.##.####.##.#..##");
-        Pair<Pair<Integer, Integer>, Map<Double, List<Asteroids>>> result = findBestLocation(map);
-        assertThat(result.getLeft()).isEqualTo(Pair.of(11, 13));
+        Pair<Point2D, Map<Double, List<Asteroids>>> result = findBestLocation(map);
+        assertThat(result.getLeft()).isEqualTo(new Point2D(11, 13));
         assertThat(result.getRight()).hasSize(210);
 
         List<Asteroids> asteroids = vaporizeAsteroids(result.getRight());
@@ -418,7 +419,7 @@ public class Day10Test {
         assertThat(asteroids).hasSize(299);
 
         Asteroids lastAsteroid = Iterables.getLast(asteroids);
-        assertThat(lastAsteroid.getPosition()).isEqualTo(Pair.of(11, 1));
+        assertThat(lastAsteroid.getPosition()).isEqualTo(new Point2D(11, 1));
 
         Asteroids asteroid = asteroids.get(199);
         assertThat(asteroid.getCoordinate()).isEqualTo(802);
@@ -426,8 +427,8 @@ public class Day10Test {
 
     @Test
     void testInputPartTwo() throws IOException {
-        Pair<Pair<Integer, Integer>, Map<Double, List<Asteroids>>> result = findBestLocation(FileUtils.readLines("/day/10/input"));
-        assertThat(result.getLeft()).isEqualTo(Pair.of(26, 29));
+        Pair<Point2D, Map<Double, List<Asteroids>>> result = findBestLocation(FileUtils.readLines("/day/10/input"));
+        assertThat(result.getLeft()).isEqualTo(new Point2D(26, 29));
         assertThat(result.getRight()).hasSize(303);
 
         List<Asteroids> asteroids = vaporizeAsteroids(result.getRight());
@@ -437,9 +438,9 @@ public class Day10Test {
 
     static class Asteroids {
         final double distance;
-        final Pair<Integer, Integer> position;
+        final Point2D position;
 
-        public Asteroids(double r, Pair<Integer, Integer> asteroid) {
+        public Asteroids(double r, Point2D asteroid) {
             this.distance = r;
             this.position = asteroid;
         }
@@ -448,12 +449,12 @@ public class Day10Test {
             return distance;
         }
 
-        public Pair<Integer, Integer> getPosition() {
+        public Point2D getPosition() {
             return position;
         }
 
-        public int getCoordinate() {
-            return position.getLeft() * 100 + position.getRight();
+        public long getCoordinate() {
+            return position.getX() * 100 + position.getY();
         }
 
         @Override
