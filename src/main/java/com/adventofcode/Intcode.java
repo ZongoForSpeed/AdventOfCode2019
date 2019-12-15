@@ -2,7 +2,6 @@ package com.adventofcode;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -217,13 +216,13 @@ public class Intcode {
     private static void setValue(List<Long> memory, int[] mode, int position, int relativeBase, int offset, long value) {
         switch (mode[offset]) {
             case 0:
-                setMemory(memory, (int) readMemory(memory,position + offset), value);
+                setMemory(memory, (int) readMemory(memory, position + offset), value);
                 break;
             case 1:
                 setMemory(memory, position + offset, value);
                 break;
             case 2:
-                setMemory(memory, relativeBase + (int) readMemory(memory,position + offset), value);
+                setMemory(memory, relativeBase + (int) readMemory(memory, position + offset), value);
                 break;
             default:
                 throw new IllegalStateException("setValue(" + mode[offset] + ")");
@@ -258,5 +257,28 @@ public class Intcode {
                 .map(settings -> Pair.of(settings, thrusterSignal(program, settings)))
                 .max((o1, o2) -> Comparator.comparingLong((ToLongFunction<Pair<List<Long>, Long>>) Pair::getRight).compare(o1, o2));
         return max.orElseGet(() -> Pair.of(Collections.emptyList(), -1L));
+    }
+
+    public static class Robot implements AutoCloseable {
+        private final ExecutorService executorService;
+        private final BlockingQueue<Long> inputQueue = new LinkedBlockingQueue<>();
+        private final BlockingQueue<Long> outputQueue = new LinkedBlockingQueue<>();
+
+        public Robot(String program) {
+            executorService = Executors.newSingleThreadExecutor();
+            executorService.submit(() -> {
+                intcode(program, take(inputQueue), outputQueue::offer);
+            });
+        }
+
+        public long action(long input) {
+            inputQueue.offer(input);
+            return take(outputQueue).getAsLong();
+        }
+
+        @Override
+        public void close() {
+            executorService.shutdown();
+        }
     }
 }

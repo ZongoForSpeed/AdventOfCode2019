@@ -62,11 +62,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  * the end.)
  */
 public class Day1Test {
-
     public static long fuelRequirements(long mass) {
         return mass / 3 - 2;
     }
-
 
     public static long sumFuelRequirements(long mass) {
         long sum = 0;
