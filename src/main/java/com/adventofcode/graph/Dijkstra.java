@@ -1,4 +1,4 @@
-package com.adventofcode;
+package com.adventofcode.graph;
 
 import org.apache.commons.lang3.tuple.Pair;
 

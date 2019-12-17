@@ -1,5 +1,6 @@
 package com.adventofcode;
 
+import com.adventofcode.maths.Digits;
 import com.google.common.collect.Ordering;
 import org.apache.commons.lang3.tuple.Pair;
 import org.testng.annotations.Test;

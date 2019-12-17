@@ -1,5 +1,6 @@
 package com.adventofcode;
 
+import com.adventofcode.maths.Arithmetic;
 import com.adventofcode.utils.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.testng.annotations.Test;

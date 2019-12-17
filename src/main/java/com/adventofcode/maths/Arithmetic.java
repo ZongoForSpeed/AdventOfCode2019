@@ -1,33 +1,33 @@
-package com.adventofcode;
+package com.adventofcode.maths;
 
 public class Arithmetic {
-    static int lcm(int a, int b, int c) {
+    public static int lcm(int a, int b, int c) {
         int lcm = lcm(a, b);
         return c * (lcm / gcd(lcm, c));
     }
 
-    static long lcm(long a, long b, long c) {
+    public static long lcm(long a, long b, long c) {
         long lcm = lcm(a, b);
         return c * (lcm / gcd(lcm, c));
     }
 
-    static int gcd(int a, int b, int c) {
+    public static int gcd(int a, int b, int c) {
         return gcd(a, gcd(b, c));
     }
 
-    static long gcd(long a, long b, long c) {
+    public static long gcd(long a, long b, long c) {
         return gcd(a, gcd(b, c));
     }
 
-    static int lcm(int a, int b) {
+    public static int lcm(int a, int b) {
         return a * b / gcd(a, b);
     }
 
-    static long lcm(long a, long b) {
+    public static long lcm(long a, long b) {
         return a * b / gcd(a, b);
     }
 
-    static int gcd(int a, int b) {
+    public static int gcd(int a, int b) {
         if (a == 0)
             return b;
         if (b == 0)
@@ -46,7 +46,7 @@ public class Arithmetic {
         return gcd;
     }
 
-    static long gcd(long a, long b) {
+    public static long gcd(long a, long b) {
         if (a == 0)
             return b;
         if (b == 0)

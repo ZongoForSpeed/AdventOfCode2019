@@ -1,5 +1,6 @@
 package com.adventofcode;
 
+import com.adventofcode.graph.Dijkstra;
 import com.adventofcode.map.Direction;
 import com.adventofcode.map.Map2D;
 import com.adventofcode.map.Point2D;
