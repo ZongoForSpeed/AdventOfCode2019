@@ -90,7 +90,7 @@ public class Intcode {
         return future.get();
     }
 
-    private static LongSupplier take(BlockingQueue<Long> queue) {
+    public static LongSupplier take(BlockingQueue<Long> queue) {
         return () -> {
             try {
                 return queue.take();

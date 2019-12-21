@@ -2,6 +2,7 @@ package com.adventofcode.graph;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -15,12 +16,10 @@ public class Dijkstra<E> {
         this.graph = graph;
     }
 
+
     public Map<E, Integer> computeDistance(E start) {
         Map<E, Integer> distance = new HashMap<>();
         graph.keySet().forEach(k -> distance.put(k, Integer.MAX_VALUE));
-
-        // Map<E, E> precedent = new HashMap<>();
-        // graph.keySet().forEach(k -> precedent.put(k, start));
 
         distance.put(start, 0);
 
@@ -36,12 +35,15 @@ public class Dijkstra<E> {
                 }
             }
 
+            if (next == null) {
+                break;
+            }
+
             nodes.remove(next);
 
-            for (Pair<E, Integer> edge : graph.get(next)) {
-                if (distance.get(edge.getKey()) > distance.get(next) + edge.getValue()) {
+            for (Pair<E, Integer> edge : graph.getOrDefault(next, Collections.emptyList())) {
+                if (distance.getOrDefault(edge.getKey(), Integer.MAX_VALUE) > distance.get(next) + edge.getValue()) {
                     distance.put(edge.getKey(), distance.get(next) + edge.getValue());
-                    // precedent.put(edge.getKey(), next);
                 }
             }
         }
