@@ -11,6 +11,10 @@ public class Point2D {
         this.y = y;
     }
 
+    public static long ManhattanDistance(Point2D a, Point2D b) {
+        return 100 * (Math.abs(a.getX() - b.getX()) + Math.abs(a.getY() - b.getY()));
+    }
+
     public Point2D move(Direction direction) {
         switch (direction) {
             case NORTH:

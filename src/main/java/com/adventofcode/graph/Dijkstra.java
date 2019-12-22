@@ -16,11 +16,9 @@ public class Dijkstra<E> {
         this.graph = graph;
     }
 
-
     public Map<E, Integer> computeDistance(E start) {
         Map<E, Integer> distance = new HashMap<>();
-        graph.keySet().forEach(k -> distance.put(k, Integer.MAX_VALUE));
-
+        // graph.keySet().forEach(k -> distance.put(k, Integer.MAX_VALUE));
         distance.put(start, 0);
 
         Set<E> nodes = new HashSet<>(graph.keySet());
@@ -42,8 +40,8 @@ public class Dijkstra<E> {
             nodes.remove(next);
 
             for (Pair<E, Integer> edge : graph.getOrDefault(next, Collections.emptyList())) {
-                if (distance.getOrDefault(edge.getKey(), Integer.MAX_VALUE) > distance.get(next) + edge.getValue()) {
-                    distance.put(edge.getKey(), distance.get(next) + edge.getValue());
+                if (distance.getOrDefault(edge.getKey(), Integer.MAX_VALUE) > minimum + edge.getValue()) {
+                    distance.put(edge.getKey(), minimum + edge.getValue());
                 }
             }
         }

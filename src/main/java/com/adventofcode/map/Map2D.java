@@ -64,6 +64,17 @@ public class Map2D implements Map<Point2D, Long> {
         return map.entrySet();
     }
 
+    public List<String> print(char[][] view, Function<Long, Character> supplier) {
+        for (Map.Entry<Point2D, Long> entry : map.entrySet()) {
+            view[(int) (entry.getKey().getY())][(int) (entry.getKey().getX())] = supplier.apply(entry.getValue());
+        }
+
+        for (char[] chars : view) {
+            System.out.println(String.valueOf(chars));
+        }
+        return Arrays.stream(view).map(String::valueOf).collect(Collectors.toList());
+    }
+
     public List<String> print(Function<Long, Character> supplier) {
         long maxX = map.keySet().stream().mapToLong(Point2D::getX).max().orElse(0L);
         long minX = map.keySet().stream().mapToLong(Point2D::getX).min().orElse(0L);
