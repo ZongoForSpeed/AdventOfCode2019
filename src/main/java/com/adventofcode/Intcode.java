@@ -95,7 +95,7 @@ public class Intcode {
             try {
                 return queue.take();
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                throw new IllegalStateException(e);
             }
         };
     }
