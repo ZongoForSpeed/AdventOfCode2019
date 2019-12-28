@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class Day7Test {
+public class Day07Test {
     /**
      * --- Day 7: Amplification Circuit ---
      * Based on the navigational maps, you're going to need to send more power to your ship's thrusters to reach Santa

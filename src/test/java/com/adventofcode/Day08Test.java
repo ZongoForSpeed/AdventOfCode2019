@@ -12,7 +12,7 @@ import java.util.stream.StreamSupport;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class Day8Test {
+public class Day08Test {
     private static int[] readImage(String input, int layerSize) {
         int[][] decoded = StreamSupport.stream(Iterables.partition(input.chars().map(c -> c - '0').boxed().collect(Collectors.toList()), layerSize).spliterator(), false)
                 .map(t -> t.stream().mapToInt(Integer::intValue).toArray())

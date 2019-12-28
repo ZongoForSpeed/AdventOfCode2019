@@ -8,7 +8,7 @@ import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class Day5Test {
+public class Day05Test {
     /**
      * --- Day 5: Sunny with a Chance of Asteroids ---
      * You're starting to sweat as the ship makes its way toward Mercury. The Elves suggest that you get the air

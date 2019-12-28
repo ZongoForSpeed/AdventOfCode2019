@@ -13,7 +13,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class Day6Test {
+public class Day06Test {
     /**
      * --- Day 6: Universal Orbit Map ---
      * You've landed at the Universal Orbit Map facility on Mercury. Because navigation in space often involves

@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class Day3Test {
+public class Day03Test {
     /**
      * --- Day 3: Crossed Wires ---
      * The gravity assist was successful, and you're well on your way to the Venus refuelling station. During the rush

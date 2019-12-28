@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class Day4Test {
+public class Day04Test {
     /**
      * --- Day 4: Secure Container ---
      * You arrive at the Venus fuel depot only to discover it's protected by a password. The Elves had written the
@@ -89,7 +89,7 @@ public class Day4Test {
 
     @Test
     void testInput() {
-        long total = IntStream.range(153517, 630395).filter(Day4Test::match).count();
+        long total = IntStream.range(153517, 630395).filter(Day04Test::match).count();
         assertThat(total).isEqualTo(1729);
     }
 
@@ -110,7 +110,7 @@ public class Day4Test {
 
     @Test
     void testInput2() {
-        long total = IntStream.range(153517, 630395).filter(Day4Test::match2).count();
+        long total = IntStream.range(153517, 630395).filter(Day04Test::match2).count();
         assertThat(total).isEqualTo(1172);
     }
 
