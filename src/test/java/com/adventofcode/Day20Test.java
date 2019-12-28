@@ -378,12 +378,12 @@ public class Day20Test {
                         Point2D d = new Point2D(x, y);
                         for (Direction direction : Direction.values()) {
                             Point2D move = d.move(direction);
-                            char c = map[(int) move.getY()][(int) move.getX()];
+                            char c = map[move.getY()][move.getX()];
                             if (c == '.') {
                                 graph.computeIfAbsent(d, ignore -> new ArrayList<>()).add(move);
                             } else if (Character.isAlphabetic(c)) {
                                 Point2D shift = move.move(direction);
-                                char cc = map[(int) shift.getY()][(int) shift.getX()];
+                                char cc = map[shift.getY()][shift.getX()];
                                 String name = getWrapName(direction, c, cc);
                                 if (shift.getX() < 2 || shift.getX() > lineLength - 2 || shift.getY() < 2 || shift.getY() > lineLength - 2) {
                                     outerDoors.add(d);

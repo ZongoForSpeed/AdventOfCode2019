@@ -66,7 +66,7 @@ public class Map2D implements Map<Point2D, Long> {
 
     public List<String> print(char[][] view, Function<Long, Character> supplier) {
         for (Map.Entry<Point2D, Long> entry : map.entrySet()) {
-            view[(int) (entry.getKey().getY())][(int) (entry.getKey().getX())] = supplier.apply(entry.getValue());
+            view[entry.getKey().getY()][entry.getKey().getX()] = supplier.apply(entry.getValue());
         }
 
         for (char[] chars : view) {
@@ -76,18 +76,18 @@ public class Map2D implements Map<Point2D, Long> {
     }
 
     public List<String> print(Function<Long, Character> supplier) {
-        long maxX = map.keySet().stream().mapToLong(Point2D::getX).max().orElse(0L);
-        long minX = map.keySet().stream().mapToLong(Point2D::getX).min().orElse(0L);
-        long maxY = map.keySet().stream().mapToLong(Point2D::getY).max().orElse(0L);
-        long minY = map.keySet().stream().mapToLong(Point2D::getY).min().orElse(0L);
+        int maxX = map.keySet().stream().mapToInt(Point2D::getX).max().orElse(0);
+        int minX = map.keySet().stream().mapToInt(Point2D::getX).min().orElse(0);
+        int maxY = map.keySet().stream().mapToInt(Point2D::getY).max().orElse(0);
+        int minY = map.keySet().stream().mapToInt(Point2D::getY).min().orElse(0);
 
-        char[][] view = new char[(int) (maxY - minY) + 1][(int) (maxX - minX) + 1];
+        char[][] view = new char[maxY - minY + 1][maxX - minX + 1];
         for (char[] chars : view) {
             Arrays.fill(chars, ' ');
         }
 
         for (Map.Entry<Point2D, Long> entry : map.entrySet()) {
-            view[(int) (entry.getKey().getY() - minY)][(int) (entry.getKey().getX() - minX)] = supplier.apply(entry.getValue());
+            view[entry.getKey().getY() - minY][entry.getKey().getX() - minX] = supplier.apply(entry.getValue());
         }
 
         for (char[] chars : view) {

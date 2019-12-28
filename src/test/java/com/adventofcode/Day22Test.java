@@ -42,8 +42,8 @@ public class Day22Test {
 
     private static List<Integer> dealWithIncrement(List<Integer> cards, int n) {
         int[] result = new int[cards.size()];
-        for (long i = 0; i < cards.size(); i++) {
-            result[(int) ((i * n) % cards.size())] = cards.get((int) i);
+        for (int i = 0; i < cards.size(); i++) {
+            result[(i * n) % cards.size()] = cards.get(i);
         }
 
         return IntStream.of(result).boxed().collect(Collectors.toList());

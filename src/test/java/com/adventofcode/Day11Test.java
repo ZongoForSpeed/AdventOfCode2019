@@ -138,7 +138,7 @@ public class Day11Test {
 
         public HullPaintingRobot() {
             hull = new Map2D();
-            position = new Point2D(0L, 0L);
+            position = new Point2D(0, 0);
             direction = Direction.NORTH;
             count = 0;
         }

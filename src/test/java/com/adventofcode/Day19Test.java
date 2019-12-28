@@ -26,11 +26,11 @@ public class Day19Test {
         return output.get() != 0L;
     }
 
-    private static Point2D findSquare(String line, long yStart, long yOffset) {
+    private static Point2D findSquare(String line, int yStart, int yOffset) {
         boolean trackBeam = false;
         double slope = findSlope(line);
-        for (long y = yStart; ; y += yOffset) {
-            for (long x = (long) (y * slope); ; ++x) {
+        for (int y = yStart; ; y += yOffset) {
+            for (int x = (int) (y * slope); ; ++x) {
                 boolean beam = tractorBeam(line, x, y);
                 if (!trackBeam) {
                     trackBeam = beam;

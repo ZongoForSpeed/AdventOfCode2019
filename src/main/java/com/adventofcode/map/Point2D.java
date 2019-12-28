@@ -3,10 +3,10 @@ package com.adventofcode.map;
 import java.util.Objects;
 
 public class Point2D {
-    private final long x;
-    private final long y;
+    private final int x;
+    private final int y;
 
-    public Point2D(long x, long y) {
+    public Point2D(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -26,15 +26,19 @@ public class Point2D {
             case EAST:
                 return new Point2D(x + 1, y);
             default:
-                return new Point2D(Long.MAX_VALUE, Long.MAX_VALUE);
+                return new Point2D(Integer.MAX_VALUE, Integer.MAX_VALUE);
         }
     }
 
-    public long getX() {
+    public Point2D move(Point2D d) {
+        return new Point2D(x + d.x, y + d.y);
+    }
+
+    public int getX() {
         return x;
     }
 
-    public long getY() {
+    public int getY() {
         return y;
     }
 

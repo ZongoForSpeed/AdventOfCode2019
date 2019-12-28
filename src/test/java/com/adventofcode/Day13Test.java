@@ -146,7 +146,7 @@ public class Day13Test {
                     ballPosition = entry.getKey();
                 }
             }
-            return Long.compare(ballPosition.getX(), paddlePosition.getX());
+            return Integer.compare(ballPosition.getX(), paddlePosition.getX());
         }
     }
 }

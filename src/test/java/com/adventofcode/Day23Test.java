@@ -12,7 +12,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -91,8 +90,6 @@ public class Day23Test {
 
     static class NetworkInterfaceController implements AutoCloseable {
         private final NetworkComputer[] computers = new NetworkComputer[50];
-        private final AtomicReference<Packet> lastReceivedPacket = new AtomicReference<>();
-        private final AtomicReference<Packet> lastSendPacket = new AtomicReference<>();
 
         public NetworkInterfaceController(String program) {
             for (int i = 0; i < 50; i++) {
@@ -241,10 +238,6 @@ public class Day23Test {
                 outputQueue.add(packet);
                 receivedPackets.clear();
             }
-        }
-
-        public boolean isIdle() {
-            return queue.isEmpty() && outputQueue.isEmpty();
         }
 
         @Override

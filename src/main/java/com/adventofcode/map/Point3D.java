@@ -20,11 +20,11 @@ public class Point3D {
         return Point2D.ManhattanDistance(a.p, b.p) + Math.abs(a.z - b.z);
     }
 
-    public long getX() {
+    public int getX() {
         return p.getX();
     }
 
-    public long getY() {
+    public int getY() {
         return p.getY();
     }
 

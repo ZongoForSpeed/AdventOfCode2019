@@ -41,11 +41,11 @@ public class Day17Test {
             return false;
         }
 
-        if (map.length <= position.getY() || map[(int) position.getY()].length <= position.getX()) {
+        if (map.length <= position.getY() || map[position.getY()].length <= position.getX()) {
             return false;
         }
 
-        return map[(int) position.getY()][(int) position.getX()] == '#';
+        return map[position.getY()][position.getX()] == '#';
     }
 
     private static List<Pair<Character, Integer>> findPath(String input) {
